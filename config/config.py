@@ -14,6 +14,7 @@ from api.user.models import User
 class Settings(BaseSettings):
     # database configurations
     DATABASE_URL: Optional[str] = None
+    CORS_ORIGINS: Optional[str] = None
 
     # JWT
     secret_key: str
