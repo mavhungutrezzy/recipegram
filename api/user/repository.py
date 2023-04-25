@@ -20,3 +20,5 @@ class UserRepository(BaseRepository):
     
     async def get_user_by_id(self, user_id: str) -> User:
         return await self.get(user_id)
+    
+    

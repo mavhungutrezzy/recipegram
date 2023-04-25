@@ -52,8 +52,6 @@ async def user_me(user: User = Depends(token_listener)):
     user = await UserRepository().get_user_by_id(user_id)
     return user
 
-    
-
 
 @router.put("/me", response_model=User)
 async def user_update_me(
@@ -62,7 +60,6 @@ async def user_update_me(
 ):
     user_update = jsonable_encoder(user_update)
     return await UserRepository().update_user(user["id"], user_update)
-
 
 
 @router.delete("/me")
@@ -81,6 +78,3 @@ async def user_delete_me(user: User = Depends(token_listener)):
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"User with ID '{user_id}' was not found",
     )
-
-
-# @router.get("/{user_id}", response_model=User)
