@@ -1,11 +1,11 @@
 from beanie import Document
-from pydantic import EmailStr
+from pydantic import EmailStr, Field
 
 
 class Admin(Document):
-    fullname: str
-    email: EmailStr
-    password: str
+    fullname: str = Field(..., description="The full name of the admin")
+    email: EmailStr = Field(..., description="The email address of the admin")
+    password: str = Field(..., description="The password of the admin")
 
     class Settings:
         name = "admin"
