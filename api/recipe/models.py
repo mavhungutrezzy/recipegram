@@ -1,14 +1,15 @@
 from datetime import datetime
 from typing import List
 from beanie import Document, PydanticObjectId
+from pydantic import Field
 
 
 class Recipe(Document):
-    title: str
-    description: str
-    ingredients: List[str]
-    instructions: List[str]
-    created_at: datetime = datetime.now()
+    title: str = Field(..., description="The title of the recipe")
+    description: str = Field(..., description="The description of the recipe")
+    ingredients: List[str] = Field(..., description="The ingredients of the recipe")
+    instructions: List[str] = Field(..., description="The instructions of the recipe")
+    created_at: datetime = datetime.now() 
     author: PydanticObjectId = None
 
     class Settings:
@@ -34,22 +35,5 @@ class Recipe(Document):
                     "Heat a lightly oiled griddle or frying pan over medium high heat. Pour or scoop the batter onto the griddle, using approximately 1/4 cup for each pancake. Brown on both sides and serve hot.",
                 ],
                 "author": "5f9a1e0d7f8b8c4f4e4b0e0d",
-            }
-        }
-
-
-class Favorite(Document):
-    user: PydanticObjectId = None
-    recipe: PydanticObjectId = None
-
-    class Settings:
-        collection_name = "favorites"
-
-    class Config:
-        json_encoders = {datetime: lambda v: v.isoformat()}
-        extra_schema = {
-            "example": {
-                "user": "5f9a1e0d7f8b8c4f4e4b0e0d",
-                "recipe": "5f9a1e0d7f8b8c4f4e4b0e0d",
             }
         }

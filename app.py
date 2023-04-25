@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 
 from api.admin.routers import router as AdminRouter
 from api.favorite.routers import router as FavoriteRouter
@@ -6,12 +8,23 @@ from api.follower.routers import router as FollowerRouter
 from api.recipe.routers import router as RecipeRouter
 from api.user.routers import router as UserRouter
 from auth.jwt_bearer import JWTBearer
-from fastapi.openapi.utils import get_openapi
-from config.config import close_database, initiate_database
+from config.config import Settings, close_database, initiate_database
+
+token_listener = JWTBearer()
+
 
 app = FastAPI()
 
-token_listener = JWTBearer()
+
+origins = Settings().CORS_ORIGINS.split(",")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
@@ -30,7 +43,7 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="RecipeGram API",
         version="1.0.0",
-        description="Recipe API",
+        description="RecipeGram API is a RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) and [MongoDB](https://www.mongodb.com/) using [Beanie](https://beanie-odm.dev/) as an ODM. It provides endpoints for performing CRUD operations on recipes, following recipe authors, viewing recipes by author, and adding recipes to favorites. It also provides endpoints for registering and authenticating users, and for managing users and recipes as an administrator. The API is secured with [JWT](https://jwt.io/) authentication",
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
@@ -41,6 +54,7 @@ def custom_openapi():
 
 
 app.openapi = custom_openapi
+
 
 app.include_router(AdminRouter, tags=["Administrator"], prefix="/admin")
 app.include_router(RecipeRouter, tags=["Recipe"], prefix="/recipe")

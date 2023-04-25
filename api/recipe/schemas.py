@@ -1,13 +1,13 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RecipeBase(BaseModel):
-    title: str
-    description: str
-    ingredients: List[str]
-    instructions: List[str]
+    title: str = Field(..., description="The title of the recipe")
+    description: str = Field(..., description="The description of the recipe")
+    ingredients: List[str] = Field(..., description="The ingredients of the recipe")
+    instructions: List[str] = Field(..., description="The instructions of the recipe")
 
     class Config:
         schema_extra = {
@@ -29,10 +29,6 @@ class RecipeBase(BaseModel):
                 ],
             }
         }
-
-
-class RecipeCreate(RecipeBase):
-    pass
 
 
 class RecipeUpdate(RecipeBase):

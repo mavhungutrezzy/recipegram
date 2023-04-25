@@ -1,30 +1,19 @@
 from typing import List, Optional
 from beanie import PydanticObjectId
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from fastapi.security import HTTPBasicCredentials
 
 
 
 class UserBase(BaseModel):
-    email: EmailStr
-    full_name: str
-    bio: Optional[str]
-    profile_pic: Optional[str]
+    email: EmailStr = Field(..., description="The email address of the user")
+    full_name: str = Field(..., description="The full name of the user")
+    bio: Optional[str] = Field(None, description="The bio of the user")
+    profile_pic: Optional[str] = Field(None, description="The profile picture of the user")
     followers: List[PydanticObjectId] = []
     following: List[PydanticObjectId] = []
 
 
-class UserCreate(UserBase):
-    password: str
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "email": "mavhungu@recipegram.com",
-                "full_name": "Mavhungu",
-                "password": "password",
-            }
-        }
 
 
 class UserUpdate(UserBase):
@@ -47,8 +36,8 @@ class UserUpdate(UserBase):
         
         
 class UserSignIn(HTTPBasicCredentials):
-    email: EmailStr
-    password: str
+    email: EmailStr = Field(..., description="The email address of the user")
+    password: str = Field(..., description="The password of the user")
 
     class Config:
         schema_extra = {
@@ -57,3 +46,6 @@ class UserSignIn(HTTPBasicCredentials):
                 "password": "password"
             }
         }
+
+class UserData(UserBase):
+    pass
