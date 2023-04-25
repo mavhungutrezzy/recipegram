@@ -46,3 +46,6 @@ class UserSignIn(HTTPBasicCredentials):
                 "password": "password"
             }
         }
+
+class UserData(UserBase):
+    pass

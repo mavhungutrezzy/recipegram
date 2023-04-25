@@ -17,3 +17,6 @@ class UserRepository(BaseRepository):
 
     async def delete_user(self, user_id: str) -> dict:
         return await self.delete(user_id)
+    
+    async def get_user_by_id(self, user_id: str) -> User:
+        return await self.get(user_id)
